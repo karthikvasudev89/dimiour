@@ -94,7 +94,41 @@ ResourceGroup module is responsible for creating the resource group.
 Subnet module is responsible for creating the subnet.
 Vnet module is responsible for creating the vnet.
 
+Naming conventions for the resources to be created:
+
+This template will append the following prefixes to the name of the resources.
+AppService: appservice-<app_service_name>
+AppServicePlan: plan-<service_plan_name>
+ResourceGroup: rg-<resource_group_name>
+Subnet: snet-<subnet_name>
+Vnet : vnet-<vnet_name>
+
 All these modules are orchestrated in the `main.tf` file of AppService module.So when we run the terraform apply command, the ResourceGroup module will be executed first then AppService module will be executed next and then the other modules will be executed in the sequence.
+
+Once the resources are created, one can access their app service by using the following URL:
+```bash
+https://appservice-<app_service_name>.azurewebsites.net
+```
+In this sample template , site config of deployment slot is created with Docker container of latest NGINX image.
+```bash
+ application_stack {
+    docker_image_name = "nginx:latest"
+    }
+```
+NOTE: We are pulling this docker image from public repo, one can also use the private repo by simply configuring the docker container repo details as follows:
+```bash
+application_stack {
+    docker_image_name = "my-private-repo/my-private-image:latest"
+    docker_registry_url = "https://my-private-repo.azurecr.io"
+    docker_registry_username = "my-private-repo"
+    docker_registry_password = "my-private-password"
+    }
+```
+
+After successfull deployment, one should be able to see the NGINX welcome page by hitting the deployment slot URL.
+```bash
+https://appservice-<app_service_name>-stagging-<index>.azurewebsites.net
+```
 
 ## Future iterations:
 
