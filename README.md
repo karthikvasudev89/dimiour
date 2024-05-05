@@ -39,9 +39,63 @@ Develop a Terraform module to deploy an Azure App Service within a Virtual Netwo
   - subnet_name - the name of the subnet where the app service will be created
   - subnet_address_prefix - the address prefix of the subnet
 
+## How to run the terraform module:
+
 Once you have the prerequisites installed and have the variables set you can run the following commands to create the app service and its dependencies:
+
+Before running the below commands , one must have set the Azure CLI and the subscription id.
+```bash
+az login
+az account set --subscription-id <subscription-id> #This is the subscription id of subscription where the storage account is located
+```
+Before setting the variables block, one must set the terraform backend configuration in the `main.tf` file as this template will utilize Azure storage account as a backend statefile storage.
+
+We can also parameterize the backend configuration in the `main.tf` file. But it should be done outside the terraform such that the terraform file is clean and easy to read.
+
+For an example this can be done on Azure DevOps pipeline YAML parameters and pass these as a variables. This will be more dynamic like you can pass the subscription id, resource group name, storage account name, container name, statefile name etc for each projects.
+
+But this template is now set to have the backend configuration in the `main.tf` file as absolute values.
+
+```bash
+backend "azurerm" {
+        resource_group_name  = "<storage_account_resource_group>"
+        storage_account_name = "<your-storage-account-name>"
+        container_name       = "<container_name>"
+        key                  = "<statefile_name>" #we can modify this to be more dynamic for other projects
+    }
+```
+Now set the variables in the `variables.tf` file and run the following commands:
 ```bash
 terraform init
 terraform plan
 terraform apply
 ```
+
+## Explanation:
+
+This project's directory structure is as follows:
+
+```bash
+.
+├── main.tf
+├── variables.tf
+└── modules
+    ├── AppService
+    ├── AppServicePlan
+    ├── ResourceGroup
+    ├── Subnet
+    └── Vnet
+```
+`modules` directory contains the modules for the app service and its dependencies.
+
+AppService module is responsible for creating the app service.
+AppServicePlan module is responsible for creating the app service plan.
+ResourceGroup module is responsible for creating the resource group.
+Subnet module is responsible for creating the subnet.
+Vnet module is responsible for creating the vnet.
+
+All these modules are orchestrated in the `main.tf` file of AppService module.So when we run the terraform apply command, the ResourceGroup module will be executed first then AppService module will be executed next and then the other modules will be executed in the sequence.
+
+## Future iterations:
+
+These modules can be deployed via any CI CD tools like Jenkins, Azure DevOps, Github Actions, etc. And can be parameterized to be used for multiple projects. As well as conditions can be applied to the modules to use exisiting Vnet and other dependencies.
