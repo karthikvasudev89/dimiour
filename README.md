@@ -109,7 +109,8 @@ Once the resources are created, one can access their app service by using the fo
 ```bash
 https://appservice-<app_service_name>.azurewebsites.net
 ```
-In this sample template , site config of deployment slot is created with Docker container of latest NGINX image.
+In this sample template , site config of deployment slot <resource "azurerm_linux_web_app_slot"> of AppService module is created with Docker container of latest NGINX image.
+
 ```bash
  application_stack {
     docker_image_name = "nginx:latest"
