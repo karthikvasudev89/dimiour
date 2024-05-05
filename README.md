@@ -1,14 +1,14 @@
-##Dimiour assessment:
+## Dimiour assessment:
 Develop a Terraform module to deploy an Azure App Service within a Virtual Network, ensuring the setup includes staging slots and adheres to best practices in code reusability and documentation.
 
-#INTRODUCTION:
+# INTRODUCTION:
     This is a sample terraform project to create an app service in Azure and integrate with a Vnet. 
     The app service will be created with a number of deployment slots. The app service will be created in a specific region and the app service will be created in a specific resource group.
     The app service will be created with a specific sku and the app service will be created with a specific os type.
     The app service will be integrated with Vnet.
     These templates are made in such a way that it can be reused for multiple projects.
 
-#Resources will be created:
+# Resources will be created:
   - Resource Group
   - Vnet
   - Subnet and delegation to serverFarm
@@ -16,7 +16,7 @@ Develop a Terraform module to deploy an Azure App Service within a Virtual Netwo
   - App Service
   - Deployment Slots
 
-#Prerequisites:
+# Prerequisites:
   - Terraform installed
   - Azure CLI installed and configured
   - Azure subscription id
@@ -24,7 +24,7 @@ Develop a Terraform module to deploy an Azure App Service within a Virtual Netwo
   - Azure account storage account resource group name
   - Azure account storage account container name
 
-#Variables:
+# Variables:
   - subscription_id - the subscription id of the subscription where the app service will be created
   - location - the location of the resources
   - resource_group_name - the resource group where the app service will be created
